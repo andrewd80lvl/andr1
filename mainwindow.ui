@@ -15,17 +15,41 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" colspan="3">
-     <widget class="QLabel" name="text">
+    <item row="0" column="0">
+     <widget class="QLabel" name="lDate">
       <property name="text">
        <string>TextLabel</string>
       </property>
-      <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </widget>
+    </item>
+    <item row="1" column="0" colspan="4">
+     <widget class="QLabel" name="lDairy">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>TextLabel</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
+    <item row="2" column="0">
+     <widget class="QPushButton" name="pbPrevDay">
+      <property name="text">
+       <string>&lt;</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QPushButton" name="pbNextDay">
+      <property name="text">
+       <string>&gt;</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
      <spacer name="horizontalSpacer">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -38,10 +62,13 @@
       </property>
      </spacer>
     </item>
-    <item row="1" column="2">
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>Дневник</string>
+    <item row="3" column="0" colspan="4">
+     <widget class="QComboBox" name="cbLog">
+      <property name="duplicatesEnabled">
+       <bool>true</bool>
+      </property>
+      <property name="frame">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
@@ -52,23 +79,41 @@
  <resources/>
  <connections>
   <connection>
-   <sender>pushButton</sender>
+   <sender>pbNextDay</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>onGetData()</slot>
+   <slot>onNextDay()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>242</x>
-     <y>331</y>
+     <x>128</x>
+     <y>315</y>
     </hint>
     <hint type="destinationlabel">
-     <x>298</x>
-     <y>293</y>
+     <x>287</x>
+     <y>303</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pbPrevDay</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onPrevDay()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>56</x>
+     <y>315</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>196</x>
+     <y>318</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
   <slot>onGetData()</slot>
+  <slot>onNextDay()</slot>
+  <slot>onPrevDay()</slot>
  </slots>
 </ui>

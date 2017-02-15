@@ -20,10 +20,13 @@ private:
     Ui::MainWindow *ui;
 
     EduTatarProvider _edutat;
+    QDate _curShowDay;
 
 public slots:
-    void onGetData();
+    void onNextDay();
+    void onPrevDay();
     void showData();
+    void log( const QString& );
 };
 
 #endif // MAINWINDOW_H
