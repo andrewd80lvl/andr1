@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "qsubject.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -13,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect( &_edutat, SIGNAL(dataReceived()), this, SLOT( showData() ) );
     connect( &_edutat, SIGNAL(progress(const QString&)), this, SLOT( log(const QString&) ) );
+    connect( &_edutat, SIGNAL(error(const QString&)), this, SLOT( netError(const QString&) ) );
     _edutat.requestDay( _curShowDay );
 }
 
@@ -33,14 +35,33 @@ void MainWindow::onPrevDay()
     _edutat.requestDay( _curShowDay );
 }
 
+void MainWindow::cleanSubjectsView()
+{
+    QLayoutItem *child;
+    while ((child = ui->laySubjects->takeAt(0)) != 0) {
+        if( child->widget() )
+            delete child->widget();
+    }
+}
+
 void MainWindow::showData()
 {
-    qDebug("in showData");
-//    QDate date= QDate(2017,02,13);
+    cleanSubjectsView();
+
     EduTatarData::day_t d= _edutat.dataForDay( _curShowDay );
+
     ui->lDate->setText( _curShowDay.toString() );
     if( d.isValid() ){
-        ui->lDairy->setText( d.toString() );
+        for( auto it= d.subjects.constBegin(); it != d.subjects.constEnd(); it++ ){
+            QSubject *ps= new QSubject( this );
+
+            ps->setName( it->subject );
+            ps->setHomework( it->homework );
+            ps->setMarks( it->marksList() );
+
+            ui->laySubjects->addWidget( ps );
+        }
+
     } else {
         ui->lDairy->setText( "no data" );
     }
@@ -48,6 +69,12 @@ void MainWindow::showData()
 
 void MainWindow::log( const QString& m)
 {
-    ui->cbLog->insertItem( 0, m );
-    ui->cbLog->setCurrentIndex(0);
+//    ui->cbLog->insertItem( 0, m );
+//    ui->cbLog->setCurrentIndex(0);
+}
+
+void MainWindow::netError( const QString& estr)
+{
+//    log( "error: " + estr );
+    ui->lDairy->setText( "Server error" );
 }

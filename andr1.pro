@@ -25,12 +25,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    edutatarprovider.cpp
+    edutatarprovider.cpp \
+    qsubject.cpp
 
 HEADERS  += mainwindow.h \
-    edutatarprovider.h
+    edutatarprovider.h \
+    qsubject.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    qsubject.ui
 
 CONFIG += mobility
 MOBILITY = 

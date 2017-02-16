@@ -44,7 +44,7 @@ EduTatarProvider::~EduTatarProvider()
 void EduTatarProvider::onSslErrors( QNetworkReply *reply, const QList<QSslError>& errors )
 {
     reply->ignoreSslErrors(errors);
-    qDebug()<<"ssl errors" << errors;
+    qDebug() << "ssl errors" << errors;
 }
 
 bool EduTatarProvider::requestDay(const QDate& day)
@@ -92,6 +92,7 @@ void EduTatarProvider::onReplyMainPage()
 
     if ( reply->error() != QNetworkReply::NoError ) {
         qDebug() << "Failure" << reply->errorString();
+        emit error("server error");
         return;
     }
 
@@ -133,6 +134,7 @@ void EduTatarProvider::onReplyLogin()
 
     if( reply->rawHeader("Location") != "/start/logon-process" ){
         qDebug() << "* logon failure";
+        emit error("server error");
         return;
     }
 
@@ -163,6 +165,7 @@ void EduTatarProvider::onReplyMainAfterLogin()
 
     if( reply->rawHeader("Location") != "/" ){
         qDebug() << "* logon failure";
+        emit error("server error");
         return;
     }
 
@@ -234,12 +237,11 @@ void EduTatarProvider::onReplyDiary()
     qCDebug(fcHttp) << "\n" << "dairy html[" << html.length() << "]: ";
     qCDebug(fcHttp) << html;
 
-    emit progress("parse dairy page");
-
     EduTatarData::day_t day;
     day.date= _requestedDate;
     if( parseDairyHtml( html, day ) == false ){
         qCritical("can't parse dairy html");
+        emit error("can't parse dairy html");
         return;
     }
     _data.addDay( day );

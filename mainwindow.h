@@ -22,11 +22,14 @@ private:
     EduTatarProvider _edutat;
     QDate _curShowDay;
 
+    void cleanSubjectsView();
+
 public slots:
     void onNextDay();
     void onPrevDay();
     void showData();
     void log( const QString& );
+    void netError( const QString& );
 };
 
 #endif // MAINWINDOW_H

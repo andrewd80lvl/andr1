@@ -42,6 +42,15 @@ public:
             return s;
         }
 
+        QStringList marksList() const {
+            QStringList sl;
+            if( ! comment.isEmpty() )
+                sl << comment;
+            for( auto it=marks.constBegin(); it!=marks.constEnd(); it++ )
+                sl << it->mark ;
+            return sl;
+        }
+
     };
 
     struct day_t {
@@ -124,6 +133,7 @@ public slots:
 signals:
     void dataReceived();
     void progress(const QString&);
+    void error(const QString&);
 };
 
 #endif // EDUTATARPROVIDER_H
