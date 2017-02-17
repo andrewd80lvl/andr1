@@ -50,14 +50,35 @@ void MainWindow::showData()
 
     EduTatarData::day_t d= _edutat.dataForDay( _curShowDay );
 
-    ui->lDate->setText( _curShowDay.toString() );
+    QString dstr= QString("%1 %2 %3")
+            .arg( _curShowDay.day() )
+            .arg( QDate::shortMonthName( _curShowDay.month() ) )
+            .arg( QDate::shortDayName( _curShowDay.dayOfWeek() ) );
+    QString whenstr;
+    int daysto= QDate::currentDate().daysTo( _curShowDay );
+    if( daysto == 0 )
+        whenstr= " Сегодня";
+    else if( daysto < 0 ){
+        daysto= -daysto;
+        if( daysto == 1 )
+            whenstr= "Вчера";
+        else
+            whenstr= QString("%1 дн назад").arg( daysto );
+    } else if( daysto > 0 ){
+        if( daysto == 1 )
+            whenstr= " Завтра";
+        else
+            whenstr= QString("%1 дн вперед").arg( daysto );
+    }
+
+    ui->lDate->setText( dstr + " <b>" + whenstr + "</b>" );
     if( d.isValid() ){
-        for( auto it= d.subjects.constBegin(); it != d.subjects.constEnd(); it++ ){
+        foreach( const EduTatarData::subject_t& s, d.subjects ){
             QSubject *ps= new QSubject( this );
 
-            ps->setName( it->subject );
-            ps->setHomework( it->homework );
-            ps->setMarks( it->marksList() );
+            ps->setName( s.subject );
+            ps->setHomework( s.homework );
+            ps->setMarks( s.marksList() );
 
             ui->laySubjects->addWidget( ps );
         }
